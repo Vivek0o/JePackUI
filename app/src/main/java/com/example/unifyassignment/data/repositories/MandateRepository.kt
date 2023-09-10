@@ -23,11 +23,11 @@ class MandateRepository {
 
     fun fetchPaymentGateway(): List<PaymentGateway> {
         val jsonData = """[
-            {"name": "Gateway1", "details": "Card Detail1", "imageUrl": "https://apptestsoko.s3.ap-south-1.amazonaws.com/assets/a.png"
+            {"name": "Airtel Payment Gateway", "details": "XXXX4213", "imageUrl": "https://apptestsoko.s3.ap-south-1.amazonaws.com/assets/a.png"
             },
-            {"name": "Gateway2", "details": "Card Detail2", "imageUrl": "https://apptestsoko.s3.ap-south-1.amazonaws.com/assets/m.png"
+            {"name": "MTN Payment Gateway", "details": "XXXX4213", "imageUrl": "https://apptestsoko.s3.ap-south-1.amazonaws.com/assets/m.png"
             },
-            {"name": "Gateway3", "details": "Card Detail3", "imageUrl": "https://apptestsoko.s3.ap-south-1.amazonaws.com/assets/fp.png"
+            {"name": "Flexi Pay Payment Gateway", "details": "XXXX4213", "imageUrl": "https://apptestsoko.s3.ap-south-1.amazonaws.com/assets/fp.png"
             }
             ]
         """
