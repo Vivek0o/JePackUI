@@ -1,6 +1,5 @@
 package com.example.unifyassignment.ui.composable
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,6 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.example.unifyassignment.R
 import com.example.unifyassignment.data.models.Mandate
 import com.example.unifyassignment.data.models.PaymentGateway
 import com.example.unifyassignment.ui.viewmodels.MandateViewModel
@@ -56,10 +60,10 @@ fun MandateScreen(viewModel: MandateViewModel) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
     ) {
-        ElevatedCard(onClick = {/* TODO*/ }) {
+        ElevatedCard(onClick = {/* TODO*/ }, colors = CardDefaults.elevatedCardColors(Color.White)) {
             FirstCardContent(mandate)
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
         Text(text = "Autopay Payment Options", style = TextStyle(fontWeight = FontWeight.ExtraBold, fontSize = 20.sp))
         Spacer(modifier = Modifier.height(16.dp))
         Row(
@@ -67,18 +71,43 @@ fun MandateScreen(viewModel: MandateViewModel) {
             modifier = Modifier.fillMaxWidth()) {
             paymentGateway.forEach { gateway ->
                 paymentCardContent(paymentGateway = gateway) {
-                    Log.e("MandateScreen", "Cardclicked:  ${it.name}")
                     selectedPaymentGateway = it
                 }
             }
             }
-        Spacer(modifier = Modifier.height(16.dp))
-        ElevatedCard {
-            Modifier
+        Spacer(modifier = Modifier.height(14.dp))
+        Text(text = "Paying Using", style = TextStyle(fontWeight = FontWeight.ExtraBold, fontSize = 10.sp))
+        Spacer(modifier = Modifier.height(12.dp))
+        ElevatedCard(
+            modifier = Modifier
                 .fillMaxWidth()
+                .padding(2.dp), shape = RectangleShape,
+            ){
             selectedPaymentGateway?.let {
-                payment -> Text(text = "${payment.name} - ${payment.details}")
-                Log.e("MandateScreen", "Cardclicked:  ${payment.name}")
+                payment ->
+                Row (horizontalArrangement = Arrangement.SpaceBetween){
+                    Image(
+                        painter = rememberImagePainter(data = payment.imageUrl),
+                        contentDescription = payment.name,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .width(23.dp)
+                            .height(23.dp)
+                            .padding(end = 2.dp)
+                    )
+                    Text(text = "${payment.name} - ${payment.details}")
+                    Spacer(modifier = Modifier.weight(1f))
+                    val imageResource = painterResource(id = R.drawable.right_arrow)
+                    Image(
+                        painter = imageResource,
+                        contentDescription = payment.name,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .width(23.dp)
+                            .height(23.dp)
+                            .padding(end = 2.dp)
+                    )
+                }
             }
         }
     }
@@ -115,7 +144,7 @@ fun FirstCardContent(mandate: Mandate?) {
             }
         }, fontSize = 12.sp, fontWeight = FontWeight.Light)
         Divider(color = Color.Black, thickness = 1.5.dp)
-        ElevatedCard {
+        ElevatedCard (colors = CardDefaults.elevatedCardColors(Color(0xFFF5F5DC))) {
             Text(color = Color(0xfff2b36f),
                 modifier = Modifier.padding(10.dp),
                 text = buildAnnotatedString {
@@ -138,19 +167,20 @@ fun FirstCardContent(mandate: Mandate?) {
 @Composable
 fun paymentCardContent(
     paymentGateway: PaymentGateway,
-    onClick: (PaymentGateway) -> Unit
+    onClick: (PaymentGateway) -> Unit,
 ) {
     Card(
         modifier = Modifier
+            .width(110.dp)
+            .height(90.dp)
             .clickable { onClick(paymentGateway) }
-            .padding(end = 8.dp)
-            .fillMaxWidth()
+            .padding(5.dp),
     ) {
         Box(contentAlignment = Alignment.Center) {
             Image(
                 painter = rememberImagePainter(data = paymentGateway.imageUrl),
                 contentDescription = paymentGateway.name,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
             )
         }
